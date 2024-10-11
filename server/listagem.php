@@ -14,7 +14,7 @@ if (isset($_POST['orderBy'])) {
 
 $query = "SELECT * FROM medicamentos WHERE nome LIKE ? ORDER BY $orderBy";
 $stmt = $conn->prepare($query);
-$searchTerm = "%$searchTerm%";
+$searchTerm = '%' . $searchTerm . '%';
 $stmt->bind_param("s", $searchTerm);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -35,7 +35,8 @@ $result = $stmt->get_result();
         <h2 class="text-center mb-4">Listagem de Medicamentos</h2>
         <form method="post" class="mb-4">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="searchTerm" placeholder="Buscar medicamento pelo nome" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                <input type="text" class="form-control" name="searchTerm" placeholder="Buscar medicamento pelo nome" value="
+                ">
                 <button class="btn btn-primary" type="submit" name="search">Buscar</button>
             </div>
 
