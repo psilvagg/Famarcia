@@ -1,24 +1,20 @@
 <?php
 include '../db/config.php';
 
-// Inicializa as variáveis de busca e ordenação
-$searchTerm = ''; // Termo de busca
-$orderBy = 'nome'; // Ordem padrão
+$searchTerm = '';
+$orderBy = 'nome';
 
-// Verifica se um termo de busca foi enviado
 if (isset($_POST['search'])) {
     $searchTerm = $_POST['searchTerm'];
 }
 
-// Verifica se uma opção de ordenação foi selecionada
 if (isset($_POST['orderBy'])) {
     $orderBy = $_POST['orderBy'];
 }
 
-// Prepara a consulta com filtro de busca e ordenação
 $query = "SELECT * FROM medicamentos WHERE nome LIKE ? ORDER BY $orderBy";
 $stmt = $conn->prepare($query);
-$searchTerm = "%$searchTerm%"; // Adiciona os caracteres '%' para busca parcial
+$searchTerm = "%$searchTerm%";
 $stmt->bind_param("s", $searchTerm);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -37,8 +33,6 @@ $result = $stmt->get_result();
 <body class="bg-light">
     <div class="container mt-5">
         <h2 class="text-center mb-4">Listagem de Medicamentos</h2>
-
-        <!-- Formulário de busca e ordenação -->
         <form method="post" class="mb-4">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchTerm" placeholder="Buscar medicamento pelo nome" value="<?php echo htmlspecialchars($searchTerm); ?>">

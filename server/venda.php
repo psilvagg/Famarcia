@@ -1,12 +1,10 @@
 <?php
 include '../db/config.php';
 
-// Verifica se a venda foi submetida
 if (isset($_POST['vender'])) {
     $medicamentoId = $_POST['medicamento_id'];
     $quantidadeVendida = $_POST['quantidade_vendida'];
 
-    // Obtém os dados do medicamento selecionado
     $stmt = $conn->prepare("SELECT quantidade FROM medicamentos WHERE id = ?");
     $stmt->bind_param("i", $medicamentoId);
     $stmt->execute();
@@ -16,9 +14,7 @@ if (isset($_POST['vender'])) {
         $row = $result->fetch_assoc();
         $quantidadeAtual = $row['quantidade'];
 
-        // Verifica se há estoque suficiente
         if ($quantidadeAtual >= $quantidadeVendida) {
-            // Atualiza o estoque subtraindo a quantidade vendida
             $novaQuantidade = $quantidadeAtual - $quantidadeVendida;
             $updateStmt = $conn->prepare("UPDATE medicamentos SET quantidade = ? WHERE id = ?");
             $updateStmt->bind_param("ii", $novaQuantidade, $medicamentoId);
@@ -54,7 +50,6 @@ if (isset($_POST['vender'])) {
                 <select id="medicamento_id" name="medicamento_id" class="form-select" required>
                     <option value="">Selecione...</option>
                     <?php
-                    // Busca todos os medicamentos para listar
                     $medicamentos = $conn->query("SELECT id, nome FROM medicamentos");
                     while ($medicamento = $medicamentos->fetch_assoc()) {
                         echo "<option value=\"{$medicamento['id']}\">{$medicamento['nome']}</option>";
